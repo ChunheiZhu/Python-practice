@@ -1,0 +1,8 @@
+{
+    "editor.minimap.maxColumn": 150,
+    "editor.minimap.size": "proportional",
+    "editor.minimap.scale": 2,
+    "editor.minimap.sectionHeaderFontSize": 15,
+    "editor.minimap.renderCharacters": true,
+    "python.REPL.enableREPLSmartSend": false
+}
