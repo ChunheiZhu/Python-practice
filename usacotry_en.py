@@ -16,6 +16,7 @@ import numpy as np
 import time
 from time import *
 import sys
+import io, textwrap
 
 # =================================================================================================
 # Python Tutorials 1–20
@@ -3260,6 +3261,160 @@ def solve19():
             print(name)
             return
 
+def test(func, input_text):
+    old_stdin = sys.stdin
+    try:
+        sys.stdin = io.StringIO(textwrap.dedent(input_text))
+        func()
+    finally:
+        sys.stdin = old_stdin
+
+def run_all_tests():
+    print('')
+    print("========== Running USACO & CCC Problems ==========\n")
+
+    tests = [
+        (solve_blocked_billboard, """\
+0 0 4 3
+5 0 8 4
+2 1 6 3
+"""),
+        (solve1, """\
+3
+0 0
+3 1
+2 5
+"""),
+        (solve2, """\
+3 4
+4 1 2 3
+4 1 3 2
+4 2 1 3
+"""),
+        (solve3, """\
+10 3
+11 4
+12 5
+"""),
+        (solve4, """\
+..........
+..........
+..........
+..B.......
+..........
+.....R....
+..........
+..........
+.....L....
+..........
+"""),
+        (solve5, """\
+3
+3 7 9
+2 6 8
+1 4 5
+"""),
+        (solve6, """\
+6
+1 10 17 12 15 2
+"""),
+        (solve7, """\
+34
+"""),
+        (solve8, """\
+1
+AbC3c2Cd9
+"""),
+        (solve9, """\
+4
+9 +
+3 -
+12 A
+2 X
+"""),
+        (solve10, """\
+80
+"""),
+        (solve11, """\
+3
+1 2 1
+3 2 1
+1 3 1
+"""),
+        (solve12, """\
+4
+2
+8
+10
+7
+"""),
+        (solve13, """\
+3 4
+3 10 8 14
+1 11 12 12
+6 2 3 9
+"""),
+        (solve14, """\
+1
+3
+5 1 4
+6 2 4
+"""),
+        (solve15, """\
+2
+a b
+b c
+1
+a d
+2
+a b c
+d e
+"""),
+        (solve16, """\
+4 3
+F 1 2
+E 2 3
+E 3 4
+"""),
+        (solve17, """\
+..........
+..........
+..........
+..B.......
+..........
+.....R....
+..........
+..........
+.....L....
+..........
+"""),
+        (solve18, """\
+3 6
+"""),
+        (solve19, """\
+7
+Bessie 2
+Elsie 3
+Daisy 2
+Gertie 9
+Annabelle 1
+Maggie 9
+Henrietta 3
+"""),
+    ]
+
+    for func, inp in tests:
+        print(f"--- {func.__name__} ---")
+        try:
+            test(func, inp)
+        except Exception as e:
+            print("Error:", e)
+        print()
+
+    print('============== All Done! ==============')
+
+#run_all_tests()
+
 def menu():
     line = "-" * 66
     print()
@@ -3271,6 +3426,7 @@ def menu():
     print(" Usage: Python 3D Graphics Tutorial (number)")
     print(line)
     print(" USACO Practice Problems:")
+    print(".  0) Run All Tests")
     print("   1) Blocked Billboard        2) Rectangle Pasture")
     print("   3) Cow Gymnastics           4) Mixing Milk")
     print("   5) Bucket Brigade           6) Sunflowers")
@@ -3282,7 +3438,7 @@ def menu():
     print("  17) Friend or Foe           18) The Bucket Brigade")
     print("  19) The Lost Cow            20) Don't Be Last")
     print(line)
-    print('Type the problem number or name ( e.g. 1 |or| Blocked Billboard |or| 1.Blocked Billboard:')
+    print('Type the problem number or name ( e.g. 1 |or| Blocked Billboard |or| 1.Blocked Billboard )')
     print(line)
 
 while True:
@@ -3290,6 +3446,8 @@ while True:
     an = input('>>>').strip()
     if an == "1" or an.lower() == "blocked billboard" or an.lower() == "1.blocked billboard":
         solve_blocked_billboard()
+    elif an == "0" or an.lower() == "run all tests":
+        run_all_tests()
     elif an == "2" or an.lower() == "rectangle pasture" or an.lower() == "2.rectangle pasture":
         solve1()
     elif an == "3" or an.lower() == "cow gymnastics" or an.lower() == "3.cow gymnastics":
@@ -3351,6 +3509,7 @@ while True:
                 print("No found.")
         else:
             print("Usage: Python 3D Graphics Tutorial (number)")
+    
     elif an.lower() == "homework 3" or an.lower() == "python tutorial 3 homework":
         Python_Tutorial_3_Homework()
     elif an.lower() == "homework 9" or an.lower() == "python tutorial 9 homework":
@@ -3359,3 +3518,4 @@ while True:
         Python_3D_Graphics_Tutorial_Homework()
     else: 
         print("Command not recognized. Try again.")
+    sleep(3)
