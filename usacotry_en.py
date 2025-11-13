@@ -2983,6 +2983,7 @@ def solve16():
     group = [-1] * (N + 1)
 
     changed = True
+    
     while changed:
         changed = False
         for t, a, b in rels:
@@ -3002,6 +3003,8 @@ def solve16():
                 if t == 'E' and group[a] == group[b]:
                     print("NO"); return
     print("YES")
+
+#solve16()
 
 # ===========================================
 # USACO Bronze 2019 US Open – Problem: The Bucket Brigade
@@ -3091,6 +3094,8 @@ def solve17():
     else:
         print(other(bucket,fire))
 
+#solve17()
+
 # =====================================================
 # USACO Bronze: The Lost Cow
 # Official problem link: https://usaco.org/index.php?page=viewproblem2&cpid=735
@@ -3159,6 +3164,8 @@ def solve18():
         direction *= -1
 
         step *= 2
+
+#solve18()
 
 # =====================================================
 # USACO Bronze: Don't Be Last!
@@ -3261,6 +3268,147 @@ def solve19():
             print(name)
             return
 
+#solve19()
+
+# =====================================================
+# 🇨🇦 CCC 2012 - Senior 5 / Junior 5
+# Problem: Mouse Journey
+# Link: https://dmoj.ca/problem/ccc12s3
+# =====================================================
+# A little mouse wants to travel across a grid.
+#
+# The mouse starts in the top-left corner (1,1) and wants to reach
+# the bottom-right corner (R,C). The mouse may only move:
+#   → one square to the right, or
+#   ↓ one square downward.
+#
+# Some squares in the grid contain obstacles ('X'), which the mouse
+# is not allowed to step on.
+#
+# Your task is to compute the number of different valid paths from
+# the start (1,1) to the destination (R,C).
+#
+# -----------------------------------------------------
+# 
+# INPUT FORMAT:
+# - The first line contains an integer R (number of rows)
+# - The second line contains an integer C (number of columns)
+# - The next R lines contain C characters each:
+#       '.' means an open square
+#       'X' means a blocked square
+# The start and end positions are guaranteed to be '.'
+#
+# OUTPUT FORMAT:
+# - Output a single integer:
+#       the number of valid paths from the top-left to the bottom-right.
+#
+# SAMPLE INPUT:
+# 3
+# 4
+# ....
+# ..X.
+# ....
+#
+# SAMPLE OUTPUT:
+# 3
+#
+# -----------------------------------------------------
+# Topic: Dynamic Programming
+# Key idea:
+#   Let dp[r][c] be the number of ways to reach cell (r,c).
+#   If cell (r,c) is not blocked, then:
+#       dp[r][c] = dp[r-1][c] + dp[r][c-1]
+#   Base case: dp[1][1] = 1
+
+def solve20():
+    R = int(input())         
+    C = int(input())          
+    grid = [list(input().strip()) for _ in range(R)]
+
+    def count_paths(r, c):
+        if r >= R or c >= C:
+            return 0
+
+        if grid[r][c] == 'X':
+            return 0
+
+        if r == R - 1 and c == C - 1:
+            return 1
+
+        right_paths = count_paths(r, c + 1)
+        down_paths = count_paths(r + 1, c)
+        return right_paths + down_paths
+
+    result = count_paths(0, 0)
+    print(result)
+
+#solve20()
+
+# =====================================================
+# USACO Bronze: Herdle
+# Contest: 2021 USACO January Contest - Bronze
+# Problem Link: https://usaco.org/index.php?page=viewproblem2&cpid=1155
+# =====================================================
+# Farmer John has invented a simple word-matching game similar to Wordle.
+#
+# You are given a 3×3 grid representing your guess, and another 3×3 grid
+# representing the correct answer. Each cell contains a capital letter A–Z.
+#
+# Your task is to compute two numbers:
+#
+# 1. GREEN (correct letter, correct position):
+#    For each position (i,j), if guess[i][j] == answer[i][j], count +1 GREEN.
+#
+# 2. YELLOW (correct letter, wrong position):
+#    Among the remaining letters (those not counted as GREEN),
+#    count how many letters appear in both grids but in different positions.
+#
+# INPUT FORMAT:
+# - Three lines: your guess grid (3 characters each)
+# - Three lines: the correct answer grid
+#
+# OUTPUT FORMAT:
+# - First line: number of GREEN cells
+# - Second line: number of YELLOW cells
+#
+# SAMPLE INPUT:
+# ABC
+# DEF
+# GHI
+# ABC
+# FED
+# GHI
+#
+# SAMPLE OUTPUT:
+# 5
+# 1
+#
+# Explanation:
+#   GREEN: A, B, C, G, H, I (positions where guess matches answer)
+#   YELLOW: E appears once in both grids but in different positions.
+# =====================================================
+
+def solve21():
+    guess = [input().strip() for _ in range(3)]
+    an = [input().strip() for _ in range(3)]
+    green = 0
+    cnt_guess = [0] * 26
+    cnt_an = [0] * 26
+    for y in range(3):
+        for x in range(3):
+            if guess[y][x] == an[y][x]:
+                green += 1
+            else:
+                g = ord(guess[y][x]) - ord('A')
+                a = ord(an[y][x])- ord('A')
+                cnt_guess[g] += 1
+                cnt_an[a] += 1
+    yellow = 0
+    for i in range(26):
+        yellow += min(cnt_guess[i],cnt_an[i])
+    print(green)
+    print(yellow)
+
 def test(func, input_text):
     old_stdin = sys.stdin
     try:
@@ -3268,6 +3416,8 @@ def test(func, input_text):
         func()
     finally:
         sys.stdin = old_stdin
+
+#solve21()
 
 def run_all_tests():
     print('')
@@ -3401,6 +3551,21 @@ Annabelle 1
 Maggie 9
 Henrietta 3
 """),
+        (solve20, """\
+3
+4
+....
+..X.
+....
+"""),
+        (solve21, """\
+ABC
+DEF
+GHI
+ABC
+FED
+GHI
+""")
     ]
 
     for func, inp in tests:
@@ -3426,7 +3591,7 @@ def menu():
     print(" Usage: Python 3D Graphics Tutorial (number)")
     print(line)
     print(" USACO Practice Problems:")
-    print(".  0) Run All Tests")
+    print("   0) Run All Tests")
     print("   1) Blocked Billboard        2) Rectangle Pasture")
     print("   3) Cow Gymnastics           4) Mixing Milk")
     print("   5) Bucket Brigade           6) Sunflowers")
@@ -3437,6 +3602,7 @@ def menu():
     print("  15) Tandem Bicycle          16) Good Groups")
     print("  17) Friend or Foe           18) The Bucket Brigade")
     print("  19) The Lost Cow            20) Don't Be Last")
+    print("  21) Mouse Journey           22) Herdle ")
     print(line)
     print('Type the problem number or name ( e.g. 1 |or| Blocked Billboard |or| 1.Blocked Billboard )')
     print(line)
@@ -3486,6 +3652,10 @@ while True:
         solve18()
     elif an == '20' or an.lower() == "don't be last" or an.lower() == "20.don't be last":
         solve19()
+    elif an == '21' or an.lower() == 'mouse journey' or an.lower() == '21.mouse journey':
+        solve20()
+    elif an == '22' or an.lower() == 'herdle' or an.lower == '22.herdle':
+        solve21()
     elif an.lower() == "exit":
         break
     elif an.lower().startswith("python tutorial"):
@@ -3519,3 +3689,4 @@ while True:
     else: 
         print("Command not recognized. Try again.")
     sleep(3)
+    
